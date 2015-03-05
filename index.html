@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--script src="js/build/react-with-addons.js"></script>
+    <script src="js/build/JSXTransformer.js"></script-->
+    <script src="js/snap.svg-min.js"></script>
+    <script src="taiwan_railways.js"></script>
+
+    <style>
+    </style>
+  </head>
+  <body>
+    <div id="svg"></div>
+    <script>
+    window.onload = function () {
+      console.log(railways);
+      var r = [];
+      var s = Snap(600, 600);
+      var k = 0;
+      var dot = [];
+      // var bigCircle = s.circle(150, 150, 100);
+      var drawIt = function() {
+        if (k >= railways.length) {
+          return;
+        }
+        var railway = railways[k];
+        // console.log(r);
+        if (k > 0) {
+          console.log(dot.length, r.length);
+          while (railway.length < dot.length) {
+            dot.pop();
+          }
+          while (railway.length + 1 < r.length) {
+            r.pop();
+          }
+          for (var i = 0; i < dot.length; i++) {
+            var ele = railway[i];
+            var x = ele[4][0];
+            var y = ele[4][1];
+            var w = ele[4][2] - ele[4][0];
+            var h = ele[4][3] - ele[4][1];
+            // dot[i] = s.circle(x + (w/2), y + (h/2), 1);
+
+            // console.log(dot[i].getBBox());
+            // dot[i].transform("t" + (x + (w/2) - dot[i].getBBox().x) + "," + (y + (h/2) - dot[i].getBBox().y));
+            if (dot[i]) {
+              dot[i].animate({
+                cx: x + (w/2),
+                cy: y + (h/2)
+              }, 200);
+            }
+          }
+          // console.log("r, ",r)
+          for (var jj = 1; jj < r.length; jj++) {
+            // var ele = railway[jj + 1];
+            // var x = ele[4][0];
+            // var y = ele[4][1];
+            // var w = ele[4][2] - ele[4][0];
+            // var h = ele[4][3] - ele[4][1];
+            // var prev = railway[jj];
+            // var px = prev[4][0];
+            // var py = prev[4][1];
+            // var pw = prev[4][2] - prev[4][0];
+            // var ph = prev[4][3] - prev[4][1];
+            // console.log(x,y,w,h,px,py,pw,ph);
+            // r[j - 1] = s.line(x + (w/2), y + (h/2), x + (w/2), y + (h/2));
+            // r[j - 1].attr({
+            //   strokeWidth: 5,
+            //   stroke: "#000",
+            //   "stroke-opacity": 0.5
+            // });
+            // console.log(j-1, r);
+            // console.log(j-1, r[j-1].getBBox())
+            // console.log(r[j - 1])
+            // var d2 = dot[jj - 1].getBBox();
+            var d = dot[jj - 1].getBBox();
+            var d2 = dot[jj].getBBox();
+            // console.log(d, d2);
+
+            r[jj - 1].attr({
+              x: d.cx,
+              y: d.cy,
+              x2: d2.cx,
+              y2: d2.cy,
+              strokeWidth: 5,
+              stroke: "#000",
+              "stroke-opacity": 0.5
+            }, 200);
+          }
+          console.log(i, jj);
+        }
+
+        // for (var i = ; i < railway.length; i++) {
+        for (var j = 1;  j < railway.length; j++) {
+          // console.log("s: ",j)
+          var ele = railway[j];
+          var x = ele[4][0];
+          var y = ele[4][1];
+          var w = ele[4][2] - ele[4][0];
+          var h = ele[4][3] - ele[4][1];
+          var prev = railway[j - 1];
+          var px = prev[4][0];
+          var py = prev[4][1];
+          var pw = prev[4][2] - prev[4][0];
+          var ph = prev[4][3] - prev[4][1];
+          // console.log(px,py, x, y, " ", x + (w/2), y + (h/2), px + (pw/2), py + (ph/2));
+          // r[j - 1] = s.line(x + (w/2), y + (h/2), px + (pw/2), py + (ph/2));
+          r[j - 1] = s.line(x + (w/2), y + (h/2), x + (w/2), y + (h/2));
+          r[j - 1].attr({
+            strokeWidth: 5,
+            stroke: "#000",
+            "stroke-opacity": 0.5
+          });
+          r[j - 1].animate({
+            x2: px + (pw/2),
+            y2: py + (ph/2)
+          }, 200*(j-1) + 20)
+
+          // r[j - 1].animate({
+
+          // }, 200);
+
+        }
+        for (var i = (k > 0 ? r.length - 1 : 0); i < railway.length; i++) {
+          var ele = railway[i];
+          var x = ele[4][0];
+          var y = ele[4][1];
+          var w = ele[4][2] - ele[4][0];
+          var h = ele[4][3] - ele[4][1];
+          dot[i] = s.circle(x + (w/2), y + (h/2), 1);
+          dot[i].animate({r: 10}, (200 * i), function() {
+            this.attr({ fill: "#ff0000", stroke: "#000", strokeWidth: 3, "stroke-opacity": 0.5  });
+          });
+        }
+        setTimeout(drawIt, 1000 + k*1000);
+        k++;
+      };
+      drawIt();
+    };
+    </script>
+    <!--script type="text/jsx">
+    </script-->
+  </body>
+</html>
