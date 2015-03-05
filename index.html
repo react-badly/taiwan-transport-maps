@@ -24,6 +24,7 @@
       var s = Snap(900, 900);
       var k = 0;
       var dot = [];
+      var numbs = [];
       var railNum = s.text(25, 25, k);
       railways = parseArray(railways);
       var drawIt = function(n) {
@@ -106,6 +107,12 @@
 
         for (var ii = i; ii < dot.length; ii++) {
           // if (ii === i) {
+          if (numbs[i]) {
+            numbs[i].attr({ x: x - 2, y: y + 2 });
+          }
+          else {
+            numbs[i] = s.text(x - 2, y + 2, i.toString()).attr({ fontSize: 9 })
+          }
 
           // }
           dot[ii].animate({
