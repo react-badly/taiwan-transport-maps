@@ -28,14 +28,15 @@
       var railNum = s.text(25, 25, k);
       railways = parseArray(railways);
       var drawIt = function(n) {
+        k+=n;
         if (!(k >= 0 && k < railways.length)) {
+          k = 0
           return;
         }
-        k+=n;
+        var railway = railways[k];
 
         railNum.remove();
         railNum = s.text(25, 25, k.toString());
-        var railway = railways[k];
 
         for (var j = 0; j < railway.length - 1; j++) {
           var r_exist = false
@@ -47,6 +48,9 @@
           var px = prev[4].x;
           var py = prev[4].y;
           r_exist = !!rlines[j];
+
+          // uncomment if you want "ghost lines"
+          // s.line(x, y, px, py).attr({ strokeWidth:1, stroke: "#f0f0f0"});
 
           if (!r_exist) {
             rlines[j] = s.line(x, y, x, y);
@@ -98,15 +102,10 @@
               cx: x,
               cy: y
             }, 220, function(i) {
-              // if (i === railway.length - 1) {
               this.attr({ fill: ((i === (railway.length - 1)) ? "#ffff00" : "#ff0000") });
-              // }
             }.bind(dot[i], i));
           }
-        }
 
-        for (var ii = i; ii < dot.length; ii++) {
-          // if (ii === i) {
           if (numbs[i]) {
             numbs[i].attr({ x: x - 2, y: y + 2 });
           }
@@ -114,8 +113,6 @@
             numbs[i] = s.text(x - 2, y + 2, i.toString()).attr({ fontSize: 9 })
           }
 
-          // }
-          dot[ii].animate({
         }
         while (railway.length < dot.length) {
           var byebyedot = dot.pop();
