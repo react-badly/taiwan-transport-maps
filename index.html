@@ -20,15 +20,20 @@
       });
     }
     window.onload = function () {
-      var r = [];
+      var rlines = [];
       var s = Snap(600, 600);
       var k = 0;
       var dot = [];
+      var railNum = s.text(25, 25, k);
       railways = parseArray(railways);
-      var drawIt = function() {
-        if (k >= railways.length) {
+      var drawIt = function(n) {
+        if (!(k >= 0 && k < railways.length)) {
           return;
         }
+        k+=n;
+
+        railNum.remove();
+        railNum = s.text(25, 25, k.toString());
         var railway = railways[k];
 
         for (var j = 1; j < railway.length; j++) {
@@ -40,22 +45,22 @@
           var prev = railway[j];
           var px = prev[4].x;
           var py = prev[4].y;
-          r_exist = !!r[j - 1];
+          r_exist = !!rlines[j - 1];
 
           if (!r_exist) {
-            r[j - 1] = s.line(x, y, x, y);
-            r[j - 1].attr({
+            rlines[j - 1] = s.line(x, y, x, y);
+            rlines[j - 1].attr({
               strokeWidth: 2,
               stroke: "#000",
               "stroke-opacity": 0.5
             });
-            r[j - 1].animate({
+            rlines[j - 1].animate({
               x2: px,
               y2: py
             }, 200);
           }
           else {
-            r[j - 1].animate({
+            rlines[j - 1].animate({
               x1: x,
               y1: y,
               x2: px,
@@ -64,12 +69,12 @@
             }, 200)
           }
         }
-        for (var jj = j - 1; jj < r.length; jj++) {
-          r[jj].animate({
+        for (var jj = j - 1; jj < rlines.length; jj++) {
+          rlines[jj].animate({
             opacity: 0.1
           }, 200, null, function() {
             this.remove();
-          }.bind(r[jj]));
+          }.bind(rlines[jj]));
         }
 
         for (var i = 0; i < railway.length; i++) {
@@ -81,18 +86,26 @@
           dot_exist = !!dot[i];
           if (!dot_exist) {
             dot[i] = s.circle(x, y, 1);
-            dot[i].animate({r: 5}, (200 * Math.min(railway.length - i, dot.length - i)), function() {
-              this.attr({ fill: "#ff0000", stroke: "#000", strokeWidth: 2, "stroke-opacity": 0.5 });
-            });
+            dot[i].animate({r: 5}, (200 * Math.min(railway.length - i, dot.length - i)), function(i) {
+              this.attr({ fill: ((i === (railway.length - 1)) ? "#ffff00" : "#ff0000"), stroke: "#000", strokeWidth: 2, "stroke-opacity": 0.5 });
+            }.bind(dot[i], i) );
           }
           else {
             dot[i].animate({
               cx: x,
               cy: y
-            }, 220);
+            }, 220, function(i) {
+              // if (i === railway.length - 1) {
+              this.attr({ fill: ((i === (railway.length - 1)) ? "#ffff00" : "#ff0000") });
+              // }
+            }.bind(dot[i], i));
           }
         }
+
         for (var ii = i; ii < dot.length; ii++) {
+          // if (ii === i) {
+
+          // }
           dot[ii].animate({
             opacity: 0.1,
             r: 1
@@ -100,11 +113,16 @@
             this.remove();
           }.bind(dot[ii]));
         }
-
-        k++;
       };
-      window.addEventListener("keyup", drawIt, false);
-      // drawIt();
+      window.addEventListener("keyup", function(e) {
+        if (e.keyCode === 37) {
+          drawIt(-1);
+        }
+        if (e.keyCode === 39) {
+          drawIt(1);
+        }
+      }, false);
+      drawIt(0);
     };
     </script>
   </body>
