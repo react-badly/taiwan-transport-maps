@@ -70,12 +70,13 @@
             }, 200)
           }
         }
-        for (var jj = j - 1; jj < rlines.length; jj++) {
-          rlines[jj].animate({
-            opacity: 0.1
+        while (railway.length < rlines.length + 1) {
+          var byebyeline = rlines.pop();
+          byebyeline.animate({
+            opacity: 0.0
           }, 200, null, function() {
             this.remove();
-          }.bind(rlines[jj]));
+          }.bind(byebyeline));
         }
 
         for (var i = 0; i < railway.length; i++) {
@@ -108,11 +109,16 @@
 
           // }
           dot[ii].animate({
+        }
+        while (railway.length < dot.length) {
+          var byebyedot = dot.pop();
+          numbs.pop().remove(); // dont care about animation for numbers
+          byebyedot.animate({
             opacity: 0.1,
             r: 1
           }, 220, null, function() {
             this.remove();
-          }.bind(dot[ii]));
+          }.bind(byebyedot));
         }
       };
       window.addEventListener("keyup", function(e) {
