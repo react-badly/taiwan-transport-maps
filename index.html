@@ -36,31 +36,32 @@
         railNum = s.text(25, 25, k.toString());
         var railway = railways[k];
 
-        for (var j = 1; j < railway.length; j++) {
+        for (var j = 0; j < railway.length - 1; j++) {
           var r_exist = false
-          var ele = railway[j - 1];
+          var ele = railway[j];
           var coords = ele[4];
           var x = coords.x;
           var y = coords.y;
-          var prev = railway[j];
+          var prev = railway[j + 1];
           var px = prev[4].x;
           var py = prev[4].y;
-          r_exist = !!rlines[j - 1];
+          r_exist = !!rlines[j];
 
           if (!r_exist) {
-            rlines[j - 1] = s.line(x, y, x, y);
-            rlines[j - 1].attr({
+            rlines[j] = s.line(x, y, x, y);
+
+            rlines[j].attr({
               strokeWidth: 2,
               stroke: "#000",
               "stroke-opacity": 0.5
             });
-            rlines[j - 1].animate({
+            rlines[j].animate({
               x2: px,
               y2: py
             }, 200);
           }
           else {
-            rlines[j - 1].animate({
+            rlines[j].animate({
               x1: x,
               y1: y,
               x2: px,
