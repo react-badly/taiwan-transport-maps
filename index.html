@@ -79,7 +79,7 @@
           var byebyeline = rlines.pop();
           byebyeline.animate({
             opacity: 0.0
-          }, 200, null, function() {
+          }, 220, null, function() {
             this.remove();
           }.bind(byebyeline));
         }
@@ -119,7 +119,7 @@
           numbs.pop().remove(); // dont care about animation for numbers
           byebyedot.animate({
             opacity: 0.1,
-            r: 1
+            r: 0
           }, 220, null, function() {
             this.remove();
           }.bind(byebyedot));
