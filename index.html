@@ -21,16 +21,18 @@
       });
     }
     window.onload = function () {
-      var rlines = [];
       var s = Snap(900, 900);
       var k = 0;
+      var rlines = [];
       var dot = [];
       var numbs = [];
       var locNames = [];
       var railNum = s.text(25, 25, k);
+
       railways = parseArray(railways);
+
       var drawIt = function(n) {
-        k+=n;
+        k += n;
         if (!(k >= 0 && k < railways.length)) {
           k = 0
           return;
@@ -41,7 +43,7 @@
         railNum = s.text(25, 25, k.toString());
 
         for (var j = 0; j < railway.length - 1; j++) {
-          var r_exist = false
+          var rExist = false
           var ele = railway[j];
           var coords = ele[4];
           var x = coords.x;
@@ -49,12 +51,12 @@
           var prev = railway[j + 1];
           var px = prev[4].x;
           var py = prev[4].y;
-          r_exist = !!rlines[j];
+          rExist = !!rlines[j];
 
           // uncomment if you want "ghost lines"
           // s.line(x, y, px, py).attr({ strokeWidth:1, stroke: "#f0f0f0"});
 
-          if (!r_exist) {
+          if (!rExist) {
             rlines[j] = s.line(x, y, x, y);
 
             rlines[j].attr({
