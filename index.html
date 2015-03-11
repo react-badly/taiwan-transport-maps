@@ -8,6 +8,7 @@
 
     <style>
     </style>
+    <meta http-equiv="content-type" content="application/html; charset=utf-8" />
   </head>
   <body>
     <div id="svg"></div>
@@ -25,6 +26,7 @@
       var k = 0;
       var dot = [];
       var numbs = [];
+      var locNames = [];
       var railNum = s.text(25, 25, k);
       railways = parseArray(railways);
       var drawIt = function(n) {
@@ -108,20 +110,24 @@
 
           if (numbs[i]) {
             numbs[i].attr({ x: x - 2, y: y + 2 });
+            locNames[i].attr({ x: x + 20, y: y + 20 });
           }
           else {
+            locNames[i] = s.text(x + 20, y + 20, ele[2]);
             numbs[i] = s.text(x - 2, y + 2, i.toString()).attr({ fontSize: 9 })
           }
 
         }
         while (railway.length < dot.length) {
           var byebyedot = dot.pop();
+          locNames.pop().remove();
           numbs.pop().remove(); // dont care about animation for numbers
           byebyedot.animate({
             opacity: 0.1,
             r: 0
           }, 220, null, function() {
             this.remove();
+
           }.bind(byebyedot));
         }
       };
